@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33213.308
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Locker", "Locker\Locker.csproj", "{0E83DF7B-9EED-4136-80A9-BD72A51EB7F4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0E83DF7B-9EED-4136-80A9-BD72A51EB7F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E83DF7B-9EED-4136-80A9-BD72A51EB7F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E83DF7B-9EED-4136-80A9-BD72A51EB7F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E83DF7B-9EED-4136-80A9-BD72A51EB7F4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6A17CA70-E1D9-4865-BAF9-37DB82882E7E}
+	EndGlobalSection
+EndGlobal
