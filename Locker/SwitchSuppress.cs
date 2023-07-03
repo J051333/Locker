@@ -24,6 +24,8 @@ namespace Locker {
         //System level functions to be used for hook and unhook keyboard input  
         private delegate IntPtr LowLevelKeyboardProc(int nCode, IntPtr wParam, IntPtr lParam);
 
+        private MainForm mainForm;
+
         [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         private static extern IntPtr SetWindowsHookEx(int id, LowLevelKeyboardProc callback, IntPtr hMod, uint dwThreadId);
 
@@ -51,7 +53,7 @@ namespace Locker {
 
                 // Disabling Windows keys 
 
-                if (objKeyInfo.key == Keys.RWin || objKeyInfo.key == Keys.LWin || objKeyInfo.key == Keys.Tab && HasAltModifier(objKeyInfo.flags) || (objKeyInfo.key == Keys.Escape || objKeyInfo.key == Keys.F4) && (Keys.Modifiers & Keys.Control) == Keys.Control) {
+                if (mainForm.isLocked && (objKeyInfo.key == Keys.RWin || objKeyInfo.key == Keys.LWin || objKeyInfo.key == Keys.Tab && HasAltModifier(objKeyInfo.flags) || (objKeyInfo.key == Keys.Escape || objKeyInfo.key == Keys.F4) && (Keys.Modifiers & Keys.Control) == Keys.Control)) {
                     return (IntPtr)1; // if 0 is returned then All the above keys will be enabled
                 }
             }
@@ -62,10 +64,11 @@ namespace Locker {
             return (flags & 0x20) == 0x20;
         }
 
-        internal void LoadSuppressor() {
+        internal void LoadSuppressor(MainForm form) {
             ProcessModule objCurrentModule = Process.GetCurrentProcess().MainModule;
             objKeyboardProcess = new LowLevelKeyboardProc(CaptureKey);
             ptrHook = SetWindowsHookEx(13, objKeyboardProcess, GetModuleHandle(objCurrentModule.ModuleName), 0);
+            mainForm = form;
         }
     }
 }

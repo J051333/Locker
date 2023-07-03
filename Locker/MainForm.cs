@@ -46,7 +46,7 @@ namespace Locker {
             public int Bottom;
         }
 
-        private bool isLocked = false;
+        internal bool isLocked = false;
         private Keys passkey = Keys.D;
 
         internal static readonly int[] LOCKED_WINDOW_SIZE = { 10, 10 };
@@ -69,7 +69,7 @@ namespace Locker {
 
             this.keyBox.Text = DEFAULT_KEY.ToString();
 
-            SwitchSuppress.switchSuppress.LoadSuppressor();
+            SwitchSuppress.switchSuppress.LoadSuppressor(this);
 
             LoadProfileDropdown();
         }
