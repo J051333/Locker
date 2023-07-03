@@ -62,7 +62,7 @@ namespace Locker {
             return (flags & 0x20) == 0x20;
         }
 
-        public void LoadSuppressor() {
+        internal void LoadSuppressor() {
             ProcessModule objCurrentModule = Process.GetCurrentProcess().MainModule;
             objKeyboardProcess = new LowLevelKeyboardProc(CaptureKey);
             ptrHook = SetWindowsHookEx(13, objKeyboardProcess, GetModuleHandle(objCurrentModule.ModuleName), 0);

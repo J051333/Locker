@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Runtime.InteropServices;
@@ -48,9 +49,9 @@ namespace Locker {
         private bool isLocked = false;
         private Keys passkey = Keys.D;
 
-        private static readonly int[] LOCKED_WINDOW_SIZE = { 10, 10 };
-        private static readonly int[] WINDOW_SIZE = { 271, 320 };
-        public static readonly Keys DEFAULT_KEY = Keys.D;
+        internal static readonly int[] LOCKED_WINDOW_SIZE = { 10, 10 };
+        internal static readonly int[] WINDOW_SIZE = { 271, 415 };
+        internal static readonly Keys DEFAULT_KEY = Keys.D;
 
         public MainForm() {
             InitializeComponent();
@@ -69,6 +70,8 @@ namespace Locker {
             this.keyBox.Text = DEFAULT_KEY.ToString();
 
             SwitchSuppress.switchSuppress.LoadSuppressor();
+
+            LoadProfileDropdown();
         }
 
         private void LockClicked(object sender, EventArgs e) {
@@ -168,12 +171,57 @@ namespace Locker {
             }
         }
 
+        internal void LoadProfileDropdown() {
+            this.profileDropdown.Items.Clear();
+            foreach (string profile in FileManager.GetProfiles()) {
+                this.profileDropdown.Items.Add(profile.Substring(0, profile.LastIndexOf(".")));
+            }
+        }
+
         public static int TryParse(string val, int def) {
             if (int.TryParse(val, out int res)) {
                 return res;
             } else {
                 return def;
             }
+        }
+
+        private void ProfileDropdownSelectionChangeCommitted(object sender, EventArgs e) {
+            ApplyProfile(this.profileDropdown.SelectedItem as string, this);
+        }
+
+        private void DeleteSelectedProfileClicked(object sender, EventArgs e) {
+
+            FileInfo[] files = new DirectoryInfo(Directory.GetCurrentDirectory()).GetFiles(this.profileDropdown.SelectedItem as string + FileManager.FILE_EXTENSION);
+            if (files.Length != 0) files[0].Delete();
+            this.LoadProfileDropdown();
+        }
+
+        private void SaveProfileClicked(object sender, EventArgs e) {
+            ProfileInfo savedProfile = new ProfileInfo(
+                this.saveProfileBox.Text,
+                TryParse(this.heightBox.Text, LOCKED_WINDOW_SIZE[1]),
+                TryParse(this.widthBox.Text, LOCKED_WINDOW_SIZE[0]),
+                TryParse(this.r.Text, SystemColors.Control.R),
+                TryParse(this.g.Text, SystemColors.Control.G),
+                TryParse(this.b.Text, SystemColors.Control.B),
+                this.minimize.Checked,
+                this.keyBox.Text);
+
+            FileManager.WriteProfile(savedProfile);
+            this.LoadProfileDropdown();
+        }
+
+        internal void ApplyProfile(string profileName, MainForm form, string dir = null) {
+            ProfileInfo readProfile = FileManager.ReadProfile(profileName, dir);
+
+            this.heightBox.Text = readProfile.height.ToString();
+            this.widthBox.Text = readProfile.width.ToString();
+            this.r.Text = readProfile.r.ToString();
+            this.g.Text = readProfile.g.ToString();
+            this.b.Text = readProfile.b.ToString();
+            this.minimize.Checked = readProfile.minimize;
+            this.keyBox.Text = readProfile.key;
         }
     }
 }

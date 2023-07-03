@@ -25,6 +25,12 @@
         private void InitializeComponent() {
             this.lockButton = new System.Windows.Forms.Button();
             this.settingsGroup = new System.Windows.Forms.GroupBox();
+            this.deleteSelectedProfile = new System.Windows.Forms.Button();
+            this.saveProfileBox = new System.Windows.Forms.TextBox();
+            this.saveProfile = new System.Windows.Forms.Button();
+            this.saveProfileLabel = new System.Windows.Forms.Label();
+            this.profilesText = new System.Windows.Forms.Label();
+            this.profileDropdown = new System.Windows.Forms.ComboBox();
             this.key = new System.Windows.Forms.Label();
             this.keyBox = new System.Windows.Forms.TextBox();
             this.minimize = new System.Windows.Forms.CheckBox();
@@ -52,6 +58,12 @@
             // 
             // settingsGroup
             // 
+            this.settingsGroup.Controls.Add(this.deleteSelectedProfile);
+            this.settingsGroup.Controls.Add(this.saveProfileBox);
+            this.settingsGroup.Controls.Add(this.saveProfile);
+            this.settingsGroup.Controls.Add(this.saveProfileLabel);
+            this.settingsGroup.Controls.Add(this.profilesText);
+            this.settingsGroup.Controls.Add(this.profileDropdown);
             this.settingsGroup.Controls.Add(this.key);
             this.settingsGroup.Controls.Add(this.keyBox);
             this.settingsGroup.Controls.Add(this.minimize);
@@ -70,10 +82,65 @@
             this.settingsGroup.Margin = new System.Windows.Forms.Padding(10);
             this.settingsGroup.Name = "settingsGroup";
             this.settingsGroup.Padding = new System.Windows.Forms.Padding(10);
-            this.settingsGroup.Size = new System.Drawing.Size(250, 277);
+            this.settingsGroup.Size = new System.Drawing.Size(306, 376);
             this.settingsGroup.TabIndex = 1;
             this.settingsGroup.TabStop = false;
             this.settingsGroup.Text = "Settings";
+            // 
+            // deleteSelectedProfile
+            // 
+            this.deleteSelectedProfile.Location = new System.Drawing.Point(131, 298);
+            this.deleteSelectedProfile.Name = "deleteSelectedProfile";
+            this.deleteSelectedProfile.Size = new System.Drawing.Size(112, 23);
+            this.deleteSelectedProfile.TabIndex = 19;
+            this.deleteSelectedProfile.Text = "Delete";
+            this.deleteSelectedProfile.UseVisualStyleBackColor = true;
+            this.deleteSelectedProfile.Click += new System.EventHandler(this.DeleteSelectedProfileClicked);
+            // 
+            // saveProfileBox
+            // 
+            this.saveProfileBox.Location = new System.Drawing.Point(12, 343);
+            this.saveProfileBox.Name = "saveProfileBox";
+            this.saveProfileBox.Size = new System.Drawing.Size(112, 20);
+            this.saveProfileBox.TabIndex = 18;
+            // 
+            // saveProfile
+            // 
+            this.saveProfile.Location = new System.Drawing.Point(131, 343);
+            this.saveProfile.Name = "saveProfile";
+            this.saveProfile.Size = new System.Drawing.Size(112, 23);
+            this.saveProfile.TabIndex = 17;
+            this.saveProfile.Text = "Save";
+            this.saveProfile.UseVisualStyleBackColor = true;
+            this.saveProfile.Click += new System.EventHandler(this.SaveProfileClicked);
+            // 
+            // saveProfileLabel
+            // 
+            this.saveProfileLabel.AutoSize = true;
+            this.saveProfileLabel.Location = new System.Drawing.Point(9, 327);
+            this.saveProfileLabel.Name = "saveProfileLabel";
+            this.saveProfileLabel.Size = new System.Drawing.Size(64, 13);
+            this.saveProfileLabel.TabIndex = 16;
+            this.saveProfileLabel.Text = "Save Profile";
+            // 
+            // profilesText
+            // 
+            this.profilesText.AutoSize = true;
+            this.profilesText.Location = new System.Drawing.Point(9, 284);
+            this.profilesText.Name = "profilesText";
+            this.profilesText.Size = new System.Drawing.Size(41, 13);
+            this.profilesText.TabIndex = 14;
+            this.profilesText.Text = "Profiles";
+            // 
+            // profileDropdown
+            // 
+            this.profileDropdown.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.profileDropdown.FormattingEnabled = true;
+            this.profileDropdown.Location = new System.Drawing.Point(12, 300);
+            this.profileDropdown.Name = "profileDropdown";
+            this.profileDropdown.Size = new System.Drawing.Size(113, 21);
+            this.profileDropdown.TabIndex = 13;
+            this.profileDropdown.SelectionChangeCommitted += new System.EventHandler(this.ProfileDropdownSelectionChangeCommitted);
             // 
             // key
             // 
@@ -178,7 +245,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(250, 277);
+            this.ClientSize = new System.Drawing.Size(306, 376);
             this.Controls.Add(this.settingsGroup);
             this.Name = "MainForm";
             this.Text = "Device Locker";
@@ -205,6 +272,12 @@
         private System.Windows.Forms.CheckBox minimize;
         private System.Windows.Forms.Label key;
         private System.Windows.Forms.TextBox keyBox;
+        private System.Windows.Forms.Label profilesText;
+        private System.Windows.Forms.ComboBox profileDropdown;
+        private System.Windows.Forms.Button deleteSelectedProfile;
+        private System.Windows.Forms.TextBox saveProfileBox;
+        private System.Windows.Forms.Button saveProfile;
+        private System.Windows.Forms.Label saveProfileLabel;
     }
 }
 
