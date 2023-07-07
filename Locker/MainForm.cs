@@ -46,8 +46,18 @@ namespace Locker {
             public int Bottom;
         }
 
+        public enum PositionState {
+            VALID,
+            INVALID,
+            DEFAULT,
+        }
+
         internal bool isLocked = false;
         private Keys passkey = Keys.D;
+
+        private Point start;
+
+        private readonly List<MonitorIndicator> monitorIndicators = new List<MonitorIndicator>();
 
         internal static readonly int[] LOCKED_WINDOW_SIZE = { 10, 10 };
         internal static readonly int[] WINDOW_SIZE = { 271, 415 };
@@ -58,20 +68,28 @@ namespace Locker {
         }
 
         private void FormLoad(object sender, EventArgs e) {
-            this.Size = new Size(WINDOW_SIZE[0], WINDOW_SIZE[1]);
-            this.CenterToScreen();
-            this.heightBox.Text = LOCKED_WINDOW_SIZE[1].ToString();
-            this.widthBox.Text = LOCKED_WINDOW_SIZE[0].ToString();
+            Size = new Size(WINDOW_SIZE[0], WINDOW_SIZE[1]);
+            CenterToScreen();
+            heightBox.Text = LOCKED_WINDOW_SIZE[1].ToString();
+            widthBox.Text = LOCKED_WINDOW_SIZE[0].ToString();
 
-            this.r.Text = SystemColors.Control.R.ToString();
-            this.g.Text = SystemColors.Control.G.ToString();
-            this.b.Text = SystemColors.Control.B.ToString();
+            r.Text = SystemColors.Control.R.ToString();
+            g.Text = SystemColors.Control.G.ToString();
+            b.Text = SystemColors.Control.B.ToString();
 
-            this.keyBox.Text = DEFAULT_KEY.ToString();
+            keyBox.Text = DEFAULT_KEY.ToString();
 
             SwitchSuppress.switchSuppress.LoadSuppressor(this);
 
             LoadProfileDropdown();
+            LoadMonitorsDropdown();
+        }
+
+        private void LoadMonitorsDropdown() {
+            for (int i = 0; i < Screen.AllScreens.Length; i++) {
+                monitorsDropdown.Items.Add(i + 1);
+            }
+            monitorsDropdown.SelectedIndex = 0;
         }
 
         private void LockClicked(object sender, EventArgs e) {
@@ -81,69 +99,120 @@ namespace Locker {
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData) {
             if (keyData == passkey && isLocked) UnlockMouse();
+
+            if (keyData == Keys.Escape) {
+                DisposeMIs();
+            }
             return base.ProcessCmdKey(ref msg, keyData);
         }
 
         private void LockMouse() {
             isLocked = true;
 
-            passkey = Enum.TryParse(this.keyBox.Text.ToUpper(), out Keys attempt) ? attempt : DEFAULT_KEY;
-            Console.WriteLine(this.keyBox.Text);
-            Console.WriteLine(this.keyBox.Text.ToUpper());
+            start = Location;
 
-            this.FormBorderStyle = FormBorderStyle.None;
+            passkey = Enum.TryParse(keyBox.Text.ToUpper(), out Keys attempt) ? attempt : DEFAULT_KEY;
+            DisposeMIs();
 
-            if (this.minimize.Checked) {
+            FormBorderStyle = FormBorderStyle.None;
+
+            if (minimize.Checked) {
                 new Shell().MinimizeAll();
                 Activate();
             }
 
             ResizeWindow();
             SetColor();
-            this.CenterToScreen();
-
             Cursor.Hide();
 
-            Rect windowRect;
-            Rect clientRect;
-            GetWindowRect(this.Handle, out windowRect);
-            GetClientRect(this.Handle, out clientRect);
+            // Cancel locking if pos is invalid
+            if (!SetPos()) {
+                UnlockMouse();
+                return;
+            }
 
-            windowRect.Right = windowRect.Left + clientRect.Right;
-            windowRect.Bottom = windowRect.Top + clientRect.Bottom;
+            Console.WriteLine(Location.ToString());
 
-            ClipCursor(ref windowRect);
 
-            this.settingsGroup.Hide();
+            GetWindowRect(Handle, out Rect clipRect);
+            GetClientRect(Handle, out Rect clientRect);
+
+            clipRect.Right = clipRect.Left + clientRect.Right - 1;
+            clipRect.Bottom = clipRect.Top + clientRect.Bottom - 1;
+            clipRect.Left += 1;
+            clipRect.Top += 1;
+
+            Console.WriteLine($"cx: {clipRect.Left} cy: {clipRect.Top} wx: {Location.X} wy: {Location.Y}");
+            Console.WriteLine($"cx: {clipRect.Right} cy: {clipRect.Bottom} wx: {Size.Width} wy: {Size.Height}");
+
+            ClipCursor(ref clipRect);
+
+            settingsGroup.Hide();
+        }
+
+        private bool SetPos() {
+            if (isLocked) {
+                CenterToScreen();
+                Location = new Point(0, 0);
+                Screen screen = Screen.AllScreens[monitorsDropdown.SelectedIndex];
+                int x, y;
+
+                switch (IsValidPosition(xBox.Text, yBox.Text)) {
+                    case PositionState.VALID:
+                        x = int.Parse(xBox.Text);
+                        y = int.Parse(yBox.Text);
+                        break;
+                    case PositionState.INVALID:
+                        return false;
+                    case PositionState.DEFAULT:
+                        x = screen.Bounds.Width / 2 - Size.Width / 2;
+                        y = screen.Bounds.Height / 2 - Size.Height / 2;
+                        break;
+                    default:
+                        return false;
+                }
+
+                x += screen.WorkingArea.Location.X;
+                y += screen.WorkingArea.Location.Y;
+
+                Location = new Point(x, y);
+
+                return true;
+            } else {
+                Location = start;
+                return false;
+            }
         }
 
         private void UnlockMouse() {
             isLocked = false;
 
-            this.FormBorderStyle = FormBorderStyle.FixedSingle;
+            SetPos();
+
+            FormBorderStyle = FormBorderStyle.FixedSingle;
 
             ResizeWindow();
             SetColor();
-            this.CenterToScreen();
+            CenterToScreen();
 
             Cursor.Show();
 
             Cursor.Clip = new Rectangle();
             Console.WriteLine("u");
 
-            this.settingsGroup.Show();
+            settingsGroup.Show();
         }
 
         private void ResizeWindow() {
             if (isLocked) {
                 int _height;
                 int _width;
-                _height = int.TryParse(this.heightBox.Text, out _height) ? _height : LOCKED_WINDOW_SIZE[1];
-                _width = int.TryParse(this.widthBox.Text, out _width) ? _width : LOCKED_WINDOW_SIZE[0];
+                _height = int.TryParse(heightBox.Text, out _height) ? _height : LOCKED_WINDOW_SIZE[1];
+                _width = int.TryParse(widthBox.Text, out _width) ? _width : LOCKED_WINDOW_SIZE[0];
 
-                this.Size = new Size(_width, _height);
+                Size = new Size(_width, _height);
             } else {
-                this.Size = new Size(WINDOW_SIZE[0], WINDOW_SIZE[1]);
+                Size = new Size(WINDOW_SIZE[0], WINDOW_SIZE[1]);
             }
         }
         private void PickColorPressed(object sender, EventArgs e) {
@@ -152,29 +221,27 @@ namespace Locker {
             if (colorPicker.ShowDialog() == DialogResult.OK) {
                 Color color = colorPicker.Color;
 
-                this.r.Text = color.R.ToString();
-                this.g.Text = color.G.ToString();
-                this.b.Text = color.B.ToString();
+                r.Text = color.R.ToString();
+                g.Text = color.G.ToString();
+                b.Text = color.B.ToString();
             }
         }
         private void SetColor() {
             if (isLocked) {
-                int[] rgb = new int[3];
-
-                this.BackColor = Color.FromArgb(
-                    TryParse(this.r.Text, SystemColors.Control.R),
-                    TryParse(this.g.Text, SystemColors.Control.G),
-                    TryParse(this.b.Text, SystemColors.Control.B)
+                BackColor = Color.FromArgb(
+                    TryParse(r.Text, SystemColors.Control.R),
+                    TryParse(g.Text, SystemColors.Control.G),
+                    TryParse(b.Text, SystemColors.Control.B)
                 );
             } else {
-                this.BackColor = SystemColors.Control;
+                BackColor = SystemColors.Control;
             }
         }
 
         internal void LoadProfileDropdown() {
-            this.profileDropdown.Items.Clear();
+            profileDropdown.Items.Clear();
             foreach (string profile in FileManager.GetProfiles()) {
-                this.profileDropdown.Items.Add(profile.Substring(0, profile.LastIndexOf(".")));
+                profileDropdown.Items.Add(profile.Substring(0, profile.LastIndexOf(".")));
             }
         }
 
@@ -187,41 +254,88 @@ namespace Locker {
         }
 
         private void ProfileDropdownSelectionChangeCommitted(object sender, EventArgs e) {
-            ApplyProfile(this.profileDropdown.SelectedItem as string, this);
+            ApplyProfile(profileDropdown.SelectedItem as string);
         }
 
         private void DeleteSelectedProfileClicked(object sender, EventArgs e) {
 
-            FileInfo[] files = new DirectoryInfo(Directory.GetCurrentDirectory()).GetFiles(this.profileDropdown.SelectedItem as string + FileManager.FILE_EXTENSION);
+            FileInfo[] files = new DirectoryInfo(Directory.GetCurrentDirectory()).GetFiles(profileDropdown.SelectedItem as string + FileManager.FILE_EXTENSION);
             if (files.Length != 0) files[0].Delete();
-            this.LoadProfileDropdown();
+            LoadProfileDropdown();
         }
 
         private void SaveProfileClicked(object sender, EventArgs e) {
             ProfileInfo savedProfile = new ProfileInfo(
-                this.saveProfileBox.Text,
-                TryParse(this.heightBox.Text, LOCKED_WINDOW_SIZE[1]),
-                TryParse(this.widthBox.Text, LOCKED_WINDOW_SIZE[0]),
-                TryParse(this.r.Text, SystemColors.Control.R),
-                TryParse(this.g.Text, SystemColors.Control.G),
-                TryParse(this.b.Text, SystemColors.Control.B),
-                this.minimize.Checked,
-                this.keyBox.Text);
+                saveProfileBox.Text,
+                TryParse(heightBox.Text, LOCKED_WINDOW_SIZE[1]),
+                TryParse(widthBox.Text, LOCKED_WINDOW_SIZE[0]),
+                TryParse(r.Text, SystemColors.Control.R),
+                TryParse(g.Text, SystemColors.Control.G),
+                TryParse(b.Text, SystemColors.Control.B),
+                minimize.Checked,
+                keyBox.Text);
 
             FileManager.WriteProfile(savedProfile);
-            this.LoadProfileDropdown();
+            LoadProfileDropdown();
         }
 
-        internal void ApplyProfile(string profileName, MainForm form, string dir = null) {
+        internal void ApplyProfile(string profileName, string dir = null) {
             ProfileInfo readProfile = FileManager.ReadProfile(profileName, dir);
 
-            this.heightBox.Text = readProfile.height.ToString();
-            this.widthBox.Text = readProfile.width.ToString();
-            this.r.Text = readProfile.r.ToString();
-            this.g.Text = readProfile.g.ToString();
-            this.b.Text = readProfile.b.ToString();
-            this.minimize.Checked = readProfile.minimize;
-            this.keyBox.Text = readProfile.key;
+            heightBox.Text = readProfile.height.ToString();
+            widthBox.Text = readProfile.width.ToString();
+            r.Text = readProfile.r.ToString();
+            g.Text = readProfile.g.ToString();
+            b.Text = readProfile.b.ToString();
+            minimize.Checked = readProfile.minimize;
+            keyBox.Text = readProfile.key;
+        }
+
+        internal PositionState IsValidPosition(String sX, String sY) {
+            Screen screen = Screen.AllScreens[monitorsDropdown.SelectedIndex];
+
+            int x, y;
+
+            try {
+                x = int.Parse(sX);
+                y = int.Parse(sY);
+            } catch (FormatException) {
+                return PositionState.DEFAULT;
+            } catch (Exception) {
+                return PositionState.INVALID;
+            }
+
+            // We can check against 0 because it never changes as the min width/height
+            // We make it fit for each individual screen later
+            if (x < 0 || x > screen.Bounds.Width) {
+                MessageBox.Show("X position is out of bounds for the given monitor.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return PositionState.INVALID;
+            }
+
+            if (y < 0 || y > screen.Bounds.Height) {
+                MessageBox.Show("Y position is out of bounds for the given monitor.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return PositionState.INVALID;
+            }
+
+            return PositionState.VALID;
+        }
+
+        private void ShowMonitorsClicked(object sender, EventArgs e) {
+            DisposeMIs();
+            for (int i = 0; i < Screen.AllScreens.Length; i++) {
+                MonitorIndicator mi = new MonitorIndicator();
+                mi.SetIndicator(i);
+                mi.Show();
+                monitorIndicators.Add(mi);
+                mi.Dis += DisposeMIs;
+            }
+            Focus();
+        }
+
+        private void DisposeMIs() {
+            foreach (MonitorIndicator mi in monitorIndicators) {
+                mi.Dispose();
+            }
         }
     }
 }

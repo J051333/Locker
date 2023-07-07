@@ -25,6 +25,12 @@
         private void InitializeComponent() {
             this.lockButton = new System.Windows.Forms.Button();
             this.settingsGroup = new System.Windows.Forms.GroupBox();
+            this.monitorLabel = new System.Windows.Forms.Label();
+            this.monitorsDropdown = new System.Windows.Forms.ComboBox();
+            this.yLabel = new System.Windows.Forms.Label();
+            this.yBox = new System.Windows.Forms.TextBox();
+            this.xLabel = new System.Windows.Forms.Label();
+            this.xBox = new System.Windows.Forms.TextBox();
             this.deleteSelectedProfile = new System.Windows.Forms.Button();
             this.saveProfileBox = new System.Windows.Forms.TextBox();
             this.saveProfile = new System.Windows.Forms.Button();
@@ -43,6 +49,7 @@
             this.widthBox = new System.Windows.Forms.TextBox();
             this.height = new System.Windows.Forms.Label();
             this.heightBox = new System.Windows.Forms.TextBox();
+            this.showMonitors = new System.Windows.Forms.Button();
             this.settingsGroup.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -58,6 +65,13 @@
             // 
             // settingsGroup
             // 
+            this.settingsGroup.Controls.Add(this.showMonitors);
+            this.settingsGroup.Controls.Add(this.monitorLabel);
+            this.settingsGroup.Controls.Add(this.monitorsDropdown);
+            this.settingsGroup.Controls.Add(this.yLabel);
+            this.settingsGroup.Controls.Add(this.yBox);
+            this.settingsGroup.Controls.Add(this.xLabel);
+            this.settingsGroup.Controls.Add(this.xBox);
             this.settingsGroup.Controls.Add(this.deleteSelectedProfile);
             this.settingsGroup.Controls.Add(this.saveProfileBox);
             this.settingsGroup.Controls.Add(this.saveProfile);
@@ -86,6 +100,56 @@
             this.settingsGroup.TabIndex = 1;
             this.settingsGroup.TabStop = false;
             this.settingsGroup.Text = "Settings";
+            // 
+            // monitorLabel
+            // 
+            this.monitorLabel.AutoSize = true;
+            this.monitorLabel.Location = new System.Drawing.Point(128, 235);
+            this.monitorLabel.Name = "monitorLabel";
+            this.monitorLabel.Size = new System.Drawing.Size(42, 13);
+            this.monitorLabel.TabIndex = 25;
+            this.monitorLabel.Text = "Monitor";
+            // 
+            // monitorsDropdown
+            // 
+            this.monitorsDropdown.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.monitorsDropdown.FormattingEnabled = true;
+            this.monitorsDropdown.Location = new System.Drawing.Point(131, 251);
+            this.monitorsDropdown.Name = "monitorsDropdown";
+            this.monitorsDropdown.Size = new System.Drawing.Size(113, 21);
+            this.monitorsDropdown.TabIndex = 24;
+            // 
+            // yLabel
+            // 
+            this.yLabel.AutoSize = true;
+            this.yLabel.Location = new System.Drawing.Point(128, 99);
+            this.yLabel.Name = "yLabel";
+            this.yLabel.Size = new System.Drawing.Size(14, 13);
+            this.yLabel.TabIndex = 23;
+            this.yLabel.Text = "Y";
+            // 
+            // yBox
+            // 
+            this.yBox.Location = new System.Drawing.Point(131, 115);
+            this.yBox.Name = "yBox";
+            this.yBox.Size = new System.Drawing.Size(112, 20);
+            this.yBox.TabIndex = 22;
+            // 
+            // xLabel
+            // 
+            this.xLabel.AutoSize = true;
+            this.xLabel.Location = new System.Drawing.Point(128, 55);
+            this.xLabel.Name = "xLabel";
+            this.xLabel.Size = new System.Drawing.Size(14, 13);
+            this.xLabel.TabIndex = 21;
+            this.xLabel.Text = "X";
+            // 
+            // xBox
+            // 
+            this.xBox.Location = new System.Drawing.Point(131, 71);
+            this.xBox.Name = "xBox";
+            this.xBox.Size = new System.Drawing.Size(112, 20);
+            this.xBox.TabIndex = 20;
             // 
             // deleteSelectedProfile
             // 
@@ -222,7 +286,7 @@
             // 
             this.widthBox.Location = new System.Drawing.Point(12, 115);
             this.widthBox.Name = "widthBox";
-            this.widthBox.Size = new System.Drawing.Size(231, 20);
+            this.widthBox.Size = new System.Drawing.Size(112, 20);
             this.widthBox.TabIndex = 3;
             // 
             // height
@@ -238,8 +302,18 @@
             // 
             this.heightBox.Location = new System.Drawing.Point(12, 71);
             this.heightBox.Name = "heightBox";
-            this.heightBox.Size = new System.Drawing.Size(231, 20);
+            this.heightBox.Size = new System.Drawing.Size(112, 20);
             this.heightBox.TabIndex = 1;
+            // 
+            // showMonitors
+            // 
+            this.showMonitors.Location = new System.Drawing.Point(47, 235);
+            this.showMonitors.Name = "showMonitors";
+            this.showMonitors.Size = new System.Drawing.Size(77, 36);
+            this.showMonitors.TabIndex = 26;
+            this.showMonitors.Text = "Show Monitors";
+            this.showMonitors.UseVisualStyleBackColor = true;
+            this.showMonitors.Click += new System.EventHandler(this.ShowMonitorsClicked);
             // 
             // MainForm
             // 
@@ -278,6 +352,13 @@
         private System.Windows.Forms.TextBox saveProfileBox;
         private System.Windows.Forms.Button saveProfile;
         private System.Windows.Forms.Label saveProfileLabel;
+        private System.Windows.Forms.Label yLabel;
+        private System.Windows.Forms.TextBox yBox;
+        private System.Windows.Forms.Label xLabel;
+        private System.Windows.Forms.TextBox xBox;
+        private System.Windows.Forms.Label monitorLabel;
+        private System.Windows.Forms.ComboBox monitorsDropdown;
+        private System.Windows.Forms.Button showMonitors;
     }
 }
 
