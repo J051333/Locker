@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace Locker {
     public partial class MonitorIndicator : Form {
-        public static readonly Size size = new Size(400, 400);
+        public static readonly Size size = new Size(400, 420);
         public delegate void DisposeOfMIs();
         public DisposeOfMIs Dis;
 
@@ -19,16 +19,18 @@ namespace Locker {
         }
 
         public void SetIndicator(int i) {
-            this.monitorNum.Text = (i + 1).ToString();
-            this.Size = size;
-            this.CenterToScreen();
+            monitorNum.Text = (i + 1).ToString();
 
-            int x = this.Location.X, y = this.Location.Y;
+            Size = size;
+            CenterToScreen();
+            Location = new Point(0, 0);
+
+            int x = Location.X, y = Location.Y;
 
             x += Screen.AllScreens[i].WorkingArea.Location.X;
             y += Screen.AllScreens[i].WorkingArea.Location.Y;
 
-            this.Location = new Point(x, y);
+            Location = new Point(x, y);
         }
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData) {

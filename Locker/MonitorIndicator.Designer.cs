@@ -61,8 +61,6 @@
 
         #endregion
 
-        private System.Windows.Forms.Label monitorNumber;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label monitorNum;
         private System.Windows.Forms.Label Esc;
     }
