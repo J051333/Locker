@@ -103,6 +103,10 @@ namespace Locker {
             if (keyData == Keys.Escape) {
                 DisposeMIs();
             }
+
+            if (keyData == Keys.Enter) {
+                LockClicked(null, null);
+            }
             return base.ProcessCmdKey(ref msg, keyData);
         }
 
@@ -132,7 +136,6 @@ namespace Locker {
             }
 
             Console.WriteLine(Location.ToString());
-
 
             GetWindowRect(Handle, out Rect clipRect);
             GetClientRect(Handle, out Rect clientRect);
