@@ -273,7 +273,10 @@ namespace Locker {
                 TryParse(g.Text, SystemColors.Control.G),
                 TryParse(b.Text, SystemColors.Control.B),
                 minimize.Checked,
-                keyBox.Text);
+                keyBox.Text,
+                xBox.Text,
+                yBox.Text,
+                monitorsDropdown.SelectedIndex);
 
             FileManager.WriteProfile(savedProfile);
             LoadProfileDropdown();
@@ -289,6 +292,9 @@ namespace Locker {
             b.Text = readProfile.b.ToString();
             minimize.Checked = readProfile.minimize;
             keyBox.Text = readProfile.key;
+            xBox.Text = readProfile.x;
+            yBox.Text = readProfile.y;
+            monitorsDropdown.SelectedIndex = readProfile.monitor;
         }
 
         internal PositionState IsValidPosition(String sX, String sY) {

@@ -97,7 +97,16 @@ namespace Locker {
                 info.minimize = bool.Parse(readFile.Substring(0, readFile.IndexOf(DELIMITER)));
                 readFile = readFile.Substring(readFile.IndexOf(DELIMITER) + DELIMITER.Length);
 
-                info.key = readFile;
+                info.key = readFile.Substring(0, readFile.IndexOf(DELIMITER));
+                readFile = readFile.Substring(readFile.IndexOf(DELIMITER) + DELIMITER.Length);
+
+                info.x = readFile.Substring(0, readFile.IndexOf(DELIMITER));
+                readFile = readFile.Substring(readFile.IndexOf(DELIMITER) + DELIMITER.Length);
+
+                info.y = readFile.Substring(0, readFile.IndexOf(DELIMITER));
+                readFile = readFile.Substring(readFile.IndexOf(DELIMITER) + DELIMITER.Length);
+
+                info.monitor = MainForm.TryParse(readFile, 0);
             } catch (Exception e) {
                 Console.WriteLine("We have encountered an error reading this file.");
                 Console.WriteLine(e.Message);
