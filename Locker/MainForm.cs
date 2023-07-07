@@ -103,6 +103,10 @@ namespace Locker {
             if (keyData == Keys.Escape) {
                 DisposeMIs();
             }
+
+            if (keyData == Keys.Enter) {
+                LockClicked(null, null);
+            }
             return base.ProcessCmdKey(ref msg, keyData);
         }
 

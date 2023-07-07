@@ -25,6 +25,7 @@
         private void InitializeComponent() {
             this.lockButton = new System.Windows.Forms.Button();
             this.settingsGroup = new System.Windows.Forms.GroupBox();
+            this.showMonitors = new System.Windows.Forms.Button();
             this.monitorLabel = new System.Windows.Forms.Label();
             this.monitorsDropdown = new System.Windows.Forms.ComboBox();
             this.yLabel = new System.Windows.Forms.Label();
@@ -49,7 +50,6 @@
             this.widthBox = new System.Windows.Forms.TextBox();
             this.height = new System.Windows.Forms.Label();
             this.heightBox = new System.Windows.Forms.TextBox();
-            this.showMonitors = new System.Windows.Forms.Button();
             this.settingsGroup.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -101,6 +101,16 @@
             this.settingsGroup.TabStop = false;
             this.settingsGroup.Text = "Settings";
             // 
+            // showMonitors
+            // 
+            this.showMonitors.Location = new System.Drawing.Point(47, 235);
+            this.showMonitors.Name = "showMonitors";
+            this.showMonitors.Size = new System.Drawing.Size(77, 36);
+            this.showMonitors.TabIndex = 11;
+            this.showMonitors.Text = "Show Monitors";
+            this.showMonitors.UseVisualStyleBackColor = true;
+            this.showMonitors.Click += new System.EventHandler(this.ShowMonitorsClicked);
+            // 
             // monitorLabel
             // 
             this.monitorLabel.AutoSize = true;
@@ -117,7 +127,7 @@
             this.monitorsDropdown.Location = new System.Drawing.Point(131, 251);
             this.monitorsDropdown.Name = "monitorsDropdown";
             this.monitorsDropdown.Size = new System.Drawing.Size(113, 21);
-            this.monitorsDropdown.TabIndex = 24;
+            this.monitorsDropdown.TabIndex = 12;
             // 
             // yLabel
             // 
@@ -133,7 +143,7 @@
             this.yBox.Location = new System.Drawing.Point(131, 115);
             this.yBox.Name = "yBox";
             this.yBox.Size = new System.Drawing.Size(112, 20);
-            this.yBox.TabIndex = 22;
+            this.yBox.TabIndex = 4;
             // 
             // xLabel
             // 
@@ -149,14 +159,14 @@
             this.xBox.Location = new System.Drawing.Point(131, 71);
             this.xBox.Name = "xBox";
             this.xBox.Size = new System.Drawing.Size(112, 20);
-            this.xBox.TabIndex = 20;
+            this.xBox.TabIndex = 3;
             // 
             // deleteSelectedProfile
             // 
             this.deleteSelectedProfile.Location = new System.Drawing.Point(131, 298);
             this.deleteSelectedProfile.Name = "deleteSelectedProfile";
             this.deleteSelectedProfile.Size = new System.Drawing.Size(112, 23);
-            this.deleteSelectedProfile.TabIndex = 19;
+            this.deleteSelectedProfile.TabIndex = 14;
             this.deleteSelectedProfile.Text = "Delete";
             this.deleteSelectedProfile.UseVisualStyleBackColor = true;
             this.deleteSelectedProfile.Click += new System.EventHandler(this.DeleteSelectedProfileClicked);
@@ -166,14 +176,14 @@
             this.saveProfileBox.Location = new System.Drawing.Point(12, 343);
             this.saveProfileBox.Name = "saveProfileBox";
             this.saveProfileBox.Size = new System.Drawing.Size(112, 20);
-            this.saveProfileBox.TabIndex = 18;
+            this.saveProfileBox.TabIndex = 15;
             // 
             // saveProfile
             // 
             this.saveProfile.Location = new System.Drawing.Point(131, 343);
             this.saveProfile.Name = "saveProfile";
             this.saveProfile.Size = new System.Drawing.Size(112, 23);
-            this.saveProfile.TabIndex = 17;
+            this.saveProfile.TabIndex = 16;
             this.saveProfile.Text = "Save";
             this.saveProfile.UseVisualStyleBackColor = true;
             this.saveProfile.Click += new System.EventHandler(this.SaveProfileClicked);
@@ -221,7 +231,7 @@
             this.keyBox.MaxLength = 1;
             this.keyBox.Name = "keyBox";
             this.keyBox.Size = new System.Drawing.Size(29, 20);
-            this.keyBox.TabIndex = 11;
+            this.keyBox.TabIndex = 10;
             // 
             // minimize
             // 
@@ -229,7 +239,7 @@
             this.minimize.Location = new System.Drawing.Point(12, 212);
             this.minimize.Name = "minimize";
             this.minimize.Size = new System.Drawing.Size(113, 17);
-            this.minimize.TabIndex = 10;
+            this.minimize.TabIndex = 9;
             this.minimize.Text = "Minimize Windows";
             this.minimize.UseVisualStyleBackColor = true;
             // 
@@ -238,21 +248,21 @@
             this.b.Location = new System.Drawing.Point(218, 160);
             this.b.Name = "b";
             this.b.Size = new System.Drawing.Size(25, 20);
-            this.b.TabIndex = 9;
+            this.b.TabIndex = 7;
             // 
             // g
             // 
             this.g.Location = new System.Drawing.Point(113, 160);
             this.g.Name = "g";
             this.g.Size = new System.Drawing.Size(25, 20);
-            this.g.TabIndex = 8;
+            this.g.TabIndex = 6;
             // 
             // pickColor
             // 
             this.pickColor.Location = new System.Drawing.Point(12, 186);
             this.pickColor.Name = "pickColor";
             this.pickColor.Size = new System.Drawing.Size(231, 20);
-            this.pickColor.TabIndex = 7;
+            this.pickColor.TabIndex = 8;
             this.pickColor.Text = "Pick";
             this.pickColor.UseVisualStyleBackColor = true;
             this.pickColor.Click += new System.EventHandler(this.PickColorPressed);
@@ -287,7 +297,7 @@
             this.widthBox.Location = new System.Drawing.Point(12, 115);
             this.widthBox.Name = "widthBox";
             this.widthBox.Size = new System.Drawing.Size(112, 20);
-            this.widthBox.TabIndex = 3;
+            this.widthBox.TabIndex = 2;
             // 
             // height
             // 
@@ -304,16 +314,6 @@
             this.heightBox.Name = "heightBox";
             this.heightBox.Size = new System.Drawing.Size(112, 20);
             this.heightBox.TabIndex = 1;
-            // 
-            // showMonitors
-            // 
-            this.showMonitors.Location = new System.Drawing.Point(47, 235);
-            this.showMonitors.Name = "showMonitors";
-            this.showMonitors.Size = new System.Drawing.Size(77, 36);
-            this.showMonitors.TabIndex = 26;
-            this.showMonitors.Text = "Show Monitors";
-            this.showMonitors.UseVisualStyleBackColor = true;
-            this.showMonitors.Click += new System.EventHandler(this.ShowMonitorsClicked);
             // 
             // MainForm
             // 
